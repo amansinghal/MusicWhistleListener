@@ -1,0 +1,165 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:src="@drawable/back" />
+
+    <TextView
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Home"
+        android:textColor="#fff"
+        android:textSize="34dp" />
+
+    <TextView
+        android:id="@+id/whistle_listener"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/home"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/headphone"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Whistle Listener"
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/advertisment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/home"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/advertisment"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Add Advertisment            "
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/select_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toggle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignLeft="@+id/advertisment"
+        android:text="@string/select_ring"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:id="@+id/toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/advertisment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flash"
+            android:textColor="#fff"
+            android:textSize="23dp" />
+
+        <ToggleButton
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/toggle_selector"
+            android:onClick="futureAlert"
+            android:text="Test"
+            android:textOff=""
+
+            android:textOn="" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/alarm_tone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/select_music"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/alarm"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Alarm Tone           "
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/ring_tone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alarm_tone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/headphone"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Ring Tone              "
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/music_tone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ring_tone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/music3"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Music                       "
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+    <TextView
+        android:id="@+id/record_tone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/music_tone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rectangle"
+        android:drawableLeft="@drawable/record"
+        android:drawablePadding="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="Recording                "
+        android:textColor="#fff"
+        android:textSize="23dp" />
+
+
+
+</RelativeLayout>
