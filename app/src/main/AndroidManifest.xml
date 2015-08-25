@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,12 @@
             android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar"></activity>
 
         <service android:name=".RunnerService"></service>
+
+        <receiver android:name="com.music.aman.musicg.BootCompleteReciever">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".Activity_Dialog_Found"
