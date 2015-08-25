@@ -4,6 +4,7 @@
 
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +26,8 @@
 
         <service android:name=".RunnerService"></service>
 
-        <activity android:name=".Activity_Dialog_Found"
+        <activity
+            android:name=".Activity_Dialog_Found"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
 
         </activity>
