@@ -1,11 +1,15 @@
 package com.music.aman.musicg;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ public class Activity_Splash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         initUI();
+        //runAnimation(iv_music2);
         iv_music1.startAnimation(Utils.getRotationAnimation());
         iv_music2.startAnimation(Utils.getRotationReverseAnimation());
         //iv_logo.startAnimation(Utils.getRotationAnimation());
@@ -45,6 +50,23 @@ public class Activity_Splash extends Activity {
         };
 
         timer.scheduleAtFixedRate(timerTask,10,50);
+    }
+
+    private void runAnimation(View view){
+
+        ValueAnimator vAnimator = ObjectAnimator.ofFloat(view, "translationY", 100f);
+        vAnimator.setDuration(1000);
+        //vAnimator.setRepeatMode(ValueAnimator.);
+        //vAnimator.setRepeatCount(ValueAnimator.INFINITE);
+
+        ValueAnimator vAnimator2 = ObjectAnimator.ofFloat(view, "translationX", -100f);
+        vAnimator2.setDuration(1000);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(vAnimator,vAnimator2);
+        set.setStartDelay(0);
+        set.start();
+
     }
 
     private void initUI() {

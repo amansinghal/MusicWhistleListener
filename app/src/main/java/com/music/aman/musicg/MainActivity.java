@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +24,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     ImageView iv_back;
     TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
+    SharedPreferences sharedPreferences;
+    public static String URI_KEY="uri_key",ALARM_TONE_KEY="alarm_tone_key";
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -30,6 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences=getSharedPreferences(URI_KEY,MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         initUI();
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
@@ -56,6 +62,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tv_record.setOnClickListener(this);
         tv_music = (TextView) findViewById(R.id.music_tone);
         tv_music.setOnClickListener(this);
+    }
+
+    private void getAlarmUri(){
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+        this.startActivityForResult(intent, 5);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 5){
+            final Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            if (uri != null) {
+                //RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM, uri);
+                sharedPreferences.edit().putString(ALARM_TONE_KEY,uri.toString()).commit();
+            }else{
+                sharedPreferences.edit().putString(ALARM_TONE_KEY,"").commit();
+            }
+
+        }
     }
 
     @Override
@@ -86,7 +115,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 recordAudio();
                 break;
             case R.id.alarm_tone:
-
+                getAlarmUri();
                 break;
         }
     }

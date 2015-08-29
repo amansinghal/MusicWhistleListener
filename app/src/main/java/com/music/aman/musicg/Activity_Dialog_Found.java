@@ -34,6 +34,10 @@ public class Activity_Dialog_Found extends Activity {
         setContentView(R.layout.activity_dialog_found);
         found_btn = (Button) findViewById(R.id.activity_dialog_found_btn);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        String alramUri=getSharedPreferences(MainActivity.URI_KEY,MODE_PRIVATE).getString(MainActivity.ALARM_TONE_KEY,"");
+        if (!alramUri.isEmpty())
+            notification = Uri.parse(alramUri);
+
         increaseTheVolume();
         r = RingtoneManager.getRingtone(getApplicationContext(), notification);
         found_btn.setOnClickListener(new View.OnClickListener() {

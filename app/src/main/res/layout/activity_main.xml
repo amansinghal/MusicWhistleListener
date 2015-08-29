@@ -52,7 +52,7 @@
         android:drawablePadding="10dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:text="Add Advertisment            "
+        android:text="Add Advertisment"
         android:textColor="#fff"
         android:textSize="23dp" />
 
@@ -75,7 +75,10 @@
         android:layout_below="@+id/advertisment"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:gravity="center_vertical">
+        android:paddingLeft="10dp"
+        android:layout_alignRight="@+id/advertisment"
+        android:layout_alignLeft="@+id/advertisment"
+        android:gravity="left">
 
         <TextView
             android:layout_width="wrap_content"
@@ -106,9 +109,11 @@
         android:background="@drawable/bg_rectangle"
         android:drawableLeft="@drawable/alarm"
         android:drawablePadding="10dp"
+        android:layout_alignRight="@+id/advertisment"
+        android:layout_alignLeft="@+id/advertisment"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:text="Alarm Tone           "
+        android:text="Alarm Tone"
         android:textColor="#fff"
         android:textSize="23dp" />
 
@@ -122,9 +127,11 @@
         android:background="@drawable/bg_rectangle"
         android:drawableLeft="@drawable/headphone"
         android:drawablePadding="10dp"
+        android:layout_alignRight="@+id/advertisment"
+        android:layout_alignLeft="@+id/advertisment"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:text="Ring Tone              "
+        android:text="Ring Tone"
         android:textColor="#fff"
         android:textSize="23dp" />
 
@@ -139,8 +146,10 @@
         android:drawableLeft="@drawable/music3"
         android:drawablePadding="10dp"
         android:paddingLeft="30dp"
+        android:layout_alignRight="@+id/advertisment"
+        android:layout_alignLeft="@+id/advertisment"
         android:paddingRight="30dp"
-        android:text="Music                       "
+        android:text="Music"
         android:textColor="#fff"
         android:textSize="23dp" />
 
@@ -156,6 +165,8 @@
         android:drawablePadding="10dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
+        android:layout_alignRight="@+id/advertisment"
+        android:layout_alignLeft="@+id/advertisment"
         android:text="Recording                "
         android:textColor="#fff"
         android:textSize="23dp" />
