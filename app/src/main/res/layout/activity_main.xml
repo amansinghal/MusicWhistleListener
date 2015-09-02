@@ -88,11 +88,12 @@
             android:textSize="23dp" />
 
         <ToggleButton
+            android:id="@+id/toggleBtn"
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/toggle_selector"
-            android:onClick="futureAlert"
+            android:checked="true"
             android:text="Test"
             android:textOff=""
 

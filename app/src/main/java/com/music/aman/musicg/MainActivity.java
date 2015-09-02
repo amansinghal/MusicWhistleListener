@@ -8,24 +8,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key";
     ImageView iv_back;
     TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
+    String currentRingtone;
     SharedPreferences sharedPreferences;
-    public static String URI_KEY="uri_key",ALARM_TONE_KEY="alarm_tone_key";
+    ToggleButton toggleButton;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -35,7 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences=getSharedPreferences(URI_KEY,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(URI_KEY, MODE_PRIVATE);
         setContentView(R.layout.activity_main);
         initUI();
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
@@ -43,7 +42,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (!Utils.isMyServiceRunning(RunnerService.class, this))
             startService(runnerServiceIntent);
     }
-
 
     private void initUI() {
         iv_back = (ImageView) findViewById(R.id.back);
@@ -62,28 +60,61 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tv_record.setOnClickListener(this);
         tv_music = (TextView) findViewById(R.id.music_tone);
         tv_music.setOnClickListener(this);
+        toggleButton = (ToggleButton) findViewById(R.id.toggleBtn);
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                sharedPreferences.edit().putBoolean(FLASH_KEY, b).commit();
+            }
+        });
     }
 
-    private void getAlarmUri(){
+    private void getAlarmUri() {
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Alarm Tone");
+        currentRingtone = sharedPreferences.getString(MainActivity.ALARM_TONE_KEY, "");
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtone.isEmpty() ? null : Uri.parse(currentRingtone));
+        this.startActivityForResult(intent, 5);
+    }
+
+    private void getMusicUri() {
+        Intent intent = new Intent();
+        intent.setType("audio/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select music"), 6);
+    }
+
+    private void getRingtoneUri() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Ringtone");
+        currentRingtone = sharedPreferences.getString(MainActivity.ALARM_TONE_KEY, "");
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtone.isEmpty() ? null : Uri.parse(currentRingtone));
         this.startActivityForResult(intent, 5);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 5){
+        if (resultCode == RESULT_OK && requestCode == 5) {
             final Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
             if (uri != null) {
                 //RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM, uri);
-                sharedPreferences.edit().putString(ALARM_TONE_KEY,uri.toString()).commit();
-            }else{
-                sharedPreferences.edit().putString(ALARM_TONE_KEY,"").commit();
+                sharedPreferences.edit().putString(ALARM_TONE_KEY, uri.toString()).commit();
+            } else {
+                sharedPreferences.edit().putString(ALARM_TONE_KEY, "").commit();
             }
 
+        }
+        if (resultCode == RESULT_OK && requestCode == 6) {
+            final Uri uri = data.getData();
+            if (uri != null) {
+                //RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM, uri);
+                sharedPreferences.edit().putString(ALARM_TONE_KEY, uri.toString()).commit();
+            } else {
+                sharedPreferences.edit().putString(ALARM_TONE_KEY, "").commit();
+            }
         }
     }
 
@@ -106,10 +137,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 futureAlert(view);
                 break;
             case R.id.music_tone:
-
+                getMusicUri();
                 break;
             case R.id.ring_tone:
-
+                getRingtoneUri();
                 break;
             case R.id.record_tone:
                 recordAudio();
@@ -121,8 +152,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void recordAudio() {
-
+        startActivity(RecorderActivity.getIntent(this));
     }
+
 
     private void dialogForWhistle() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);

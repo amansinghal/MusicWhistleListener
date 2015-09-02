@@ -33,9 +33,10 @@ public class RecorderThread extends Thread {
     private int sampleRate = 44100;
     private int frameByteSize = 2048; // for 1024 fft size (16bit sample size)
     byte[] buffer;
+    int recBufSize;
 
     public RecorderThread() {
-        int recBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfiguration, audioEncoding); // need to be larger than size of a frame
+        recBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfiguration, audioEncoding); // need to be larger than size of a frame
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConfiguration, audioEncoding, recBufSize);
         buffer = new byte[frameByteSize];
     }
