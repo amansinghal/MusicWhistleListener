@@ -58,9 +58,10 @@ public class RecorderThread extends Thread {
         }
     }
 
-    public void stopRecording() {
+    public synchronized void stopRecording() {
         try {
             audioRecord.stop();
+            audioRecord.release();
             isRecording = false;
         } catch (Exception e) {
             e.printStackTrace();

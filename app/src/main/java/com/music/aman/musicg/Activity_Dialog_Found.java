@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -24,6 +25,8 @@ public class Activity_Dialog_Found extends Activity {
     Thread flashThread;
     boolean ShouldIGlow = true;
     private Camera cam;
+    MediaPlayer mediaPlayer;
+    String alramUri;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, Activity_Dialog_Found.class);
@@ -38,7 +41,7 @@ public class Activity_Dialog_Found extends Activity {
         setContentView(R.layout.activity_dialog_found);
         found_btn = (Button) findViewById(R.id.activity_dialog_found_btn);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        String alramUri = getSharedPreferences(MainActivity.URI_KEY, MODE_PRIVATE).getString(MainActivity.ALARM_TONE_KEY, "");
+       alramUri= getSharedPreferences(MainActivity.URI_KEY, MODE_PRIVATE).getString(MainActivity.ALARM_TONE_KEY, "");
         if (!alramUri.isEmpty())
             notification = Uri.parse(alramUri);
 
@@ -48,11 +51,22 @@ public class Activity_Dialog_Found extends Activity {
             @Override
             public void onClick(View view) {
                 am.setStreamVolume(AudioManager.STREAM_RING, currentVolume, 0);
-                r.stop();
+                if (alramUri.contains("file:///")) {
+                    mediaPlayer.stop();
+                } else {
+                    r.stop();
+                }
                 finish();
             }
         });
-        r.play();
+
+        if (alramUri.contains("file:///")) {
+           mediaPlayer  = MediaPlayer.create(this,notification);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        } else {
+            r.play();
+        }
         flashThread = new Thread(
                 new Runnable() {
                     @Override
@@ -61,21 +75,25 @@ public class Activity_Dialog_Found extends Activity {
                     }
                 }
         );
-        if (getSharedPreferences(MainActivity.URI_KEY,MODE_PRIVATE).getBoolean(MainActivity.FLASH_KEY,true))
-        flashThread.start();
+        if (getSharedPreferences(MainActivity.URI_KEY, MODE_PRIVATE).getBoolean(MainActivity.FLASH_KEY, true))
+            flashThread.start();
     }
 
     private void increaseTheVolume() {
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         currentVolume = am.getStreamVolume(AudioManager.STREAM_RING);
-        //am.setStreamVolume(AudioManager.STREAM_RING, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        am.setStreamVolume(AudioManager.STREAM_RING, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         am.setStreamVolume(AudioManager.STREAM_RING, currentVolume, 0);
-        r.stop();
+        if (alramUri.contains("file:///")) {
+            mediaPlayer.stop();
+        } else {
+            r.stop();
+        }
         ShouldIGlow = false;
     }
 

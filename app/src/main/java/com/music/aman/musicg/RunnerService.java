@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by AmaN on 8/22/2015.
@@ -35,10 +34,17 @@ public class RunnerService extends Service implements OnSignalsDetectedListener 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (recorderThread  != null )
-            recorderThread=null;
+        Log.e(getClass().getSimpleName(),"onDestroy");
+        stopThread();
+    }
+
+    private synchronized void stopThread(){
+        if (recorderThread  != null){
+            recorderThread.stopRecording();
+            recorderThread.interrupt();
+        }
         if (detectorThread!=null){
-            detectorThread=null;
+            detectorThread.interrupt();
         }
     }
 

@@ -57,6 +57,7 @@ public class Utils {
                 return true;
             }
         }
+        Log.e(serviceClass.getSimpleName(), "Not Found");
         return false;
     }
 

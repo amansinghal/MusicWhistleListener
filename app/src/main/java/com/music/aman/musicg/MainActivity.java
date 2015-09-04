@@ -39,8 +39,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initUI();
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
         runnerServiceIntent = new Intent(this, RunnerService.class);
-        if (!Utils.isMyServiceRunning(RunnerService.class, this))
-            startService(runnerServiceIntent);
     }
 
     private void initUI() {
@@ -152,9 +150,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void recordAudio() {
+        stopService(runnerServiceIntent);
+        Utils.isMyServiceRunning(RunnerService.class, this);
         startActivity(RecorderActivity.getIntent(this));
     }
 
+    @Override
+    protected void onResume() {
+        if (!Utils.isMyServiceRunning(RunnerService.class, this))
+            startService(runnerServiceIntent);
+        super.onResume();
+    }
 
     private void dialogForWhistle() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
