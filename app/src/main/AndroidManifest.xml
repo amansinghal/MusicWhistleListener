@@ -3,14 +3,16 @@
     package="com.music.aman.musicg">
 
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".ApplicationContext"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name">
@@ -43,6 +45,12 @@
         <activity
             android:name=".Activity_Dialog_Found"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+
+        </activity>
+
+        <activity
+            android:name=".AuthorizationActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
 
         </activity>
     </application>

@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class Utils {
 
+    public static String FireBase_URL = "https://luminous-torch-931.firebaseio.com/";
+
     public static Animation getRotationAnimation() {
         RotateAnimation anim = new RotateAnimation(0f, 25f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setInterpolator(new LinearInterpolator());

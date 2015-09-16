@@ -18,7 +18,7 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key";
+    public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY";
     ImageView iv_back;
     TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
@@ -132,10 +132,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.select_music:
-                futureAlert(view);
+                //futureAlert(view);
                 break;
             case R.id.music_tone:
-                getMusicUri();
+                checkAuthorization();
+                //getMusicUri();
                 break;
             case R.id.ring_tone:
                 getRingtoneUri();
@@ -146,6 +147,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.alarm_tone:
                 getAlarmUri();
                 break;
+        }
+    }
+
+    private void checkAuthorization(){
+        if (sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+
+        }else{
+            startActivity(AuthorizationActivity.getIntent(this));
         }
     }
 

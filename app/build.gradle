@@ -18,6 +18,9 @@ android {
     }
     packagingOptions {
         exclude 'AndroidManifest.xml'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
     }
     productFlavors {
     }
@@ -28,4 +31,5 @@ dependencies {
     compile files('src/main/libs/musicg-1.4.2.0.jar')
     compile 'com.android.support:support-v4:22.2.1'
     compile files('src/main/libs/musicg.jar')
+    compile 'com.firebase:firebase-client-android:2.3.1+'
 }
