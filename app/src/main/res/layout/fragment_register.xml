@@ -32,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/register_page_padding_left_right"
-            android:drawableRight="@drawable/letter_black"
             android:hint="E-mail"
             android:singleLine="true"
             android:padding="10dp" />
@@ -42,7 +41,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/register_page_padding_left_right"
-            android:drawableRight="@drawable/lock_black"
             android:hint="Password"
             android:singleLine="true"
             android:inputType="textPassword"

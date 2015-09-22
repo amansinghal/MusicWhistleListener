@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.music.aman.musicg.Firebase.FireBaseInstance;
 import com.music.aman.musicg.Models.Users;
 import com.music.aman.musicg.R;
@@ -55,57 +50,9 @@ public class Frag_Register extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_sign_in) {
-            checkEmail(et_email.getText().toString());
+
             //registerEmailPassword(et_email.getText().toString(),et_pass.getText().toString());
         }
     }
 
-    private void checkEmail(String email) {
-        dialog.show();
-        Firebase firebase = FireBaseInstance.getInstance(FireBaseInstance.FB_KEY_USER);
-        Query query = firebase.equalTo(email, "email");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                dialog.hide();
-                System.out.println(dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                dialog.hide();
-                System.out.println(dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                dialog.hide();
-                System.out.println(dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                dialog.hide();
-                System.out.println(dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                dialog.hide();
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
-    }
-
-    private void registerEmailPassword(String email,String password){
-        dialog.show();
-        Firebase firebase = FireBaseInstance.getInstance(FireBaseInstance.FB_KEY_USER);
-        Users users = new Users(email,false,password);
-        firebase.setValue(users, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                dialog.hide();
-            }
-        });
-    }
 }
