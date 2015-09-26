@@ -6,4 +6,6 @@
     <string name="whistle_find">Whistle &amp; Find</string>
     <string name="select_ring"><u>Select options:.</u></string>
     <string name="ready_to_record">Ready to record</string>
+    <string name="facebook_app_id">1673684772867391</string>
+    <string name="user_warning">You are not a registered now to proceed further you have to register your self using Facebook</string>
 </resources>

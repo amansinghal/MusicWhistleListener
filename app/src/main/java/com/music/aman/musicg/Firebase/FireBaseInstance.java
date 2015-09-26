@@ -1,6 +1,5 @@
 package com.music.aman.musicg.Firebase;
 
-import com.firebase.client.Firebase;
 import com.music.aman.musicg.Utils;
 
 /**
@@ -10,8 +9,4 @@ public class FireBaseInstance  {
 
     public static final String FB_KEY_USER="Users";
 
-    public static Firebase getInstance(String childNodeName){
-        Firebase firebase = new Firebase(Utils.FireBase_URL+childNodeName);
-        return firebase;
-    };
 }

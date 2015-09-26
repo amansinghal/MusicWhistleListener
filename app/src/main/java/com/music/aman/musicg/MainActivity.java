@@ -18,8 +18,9 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY";
-    ImageView iv_back;
+    public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",
+            IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY",USER_INFO_KEY="USER_INFO_KEY",USER_ID_KEY="USER_ID_KEY";
+    ImageView iv_back,profile;
     TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
     String currentRingtone;
@@ -43,6 +44,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void initUI() {
         iv_back = (ImageView) findViewById(R.id.back);
+        profile = (ImageView) findViewById(R.id.profile);
+        profile.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         tv_advertisement = (TextView) findViewById(R.id.advertisment);
         tv_advertisement.setOnClickListener(this);
@@ -133,10 +136,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.select_music:
                 //futureAlert(view);
+                if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+                    checkAuthorization();
+                }else{
+
+                }
                 break;
             case R.id.music_tone:
-                checkAuthorization();
-                //getMusicUri();
+                if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+                    checkAuthorization();
+                }else{
+
+                }
                 break;
             case R.id.ring_tone:
                 getRingtoneUri();
@@ -147,15 +158,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.alarm_tone:
                 getAlarmUri();
                 break;
+            case R.id.profile:
+                checkAuthorization();
+                break;
         }
     }
 
     private void checkAuthorization(){
-        if (sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
-
-        }else{
-            startActivity(AuthorizationActivity.getIntent(this));
-        }
+        startActivity(AuthorizationActivity.getIntent(this));
     }
 
     private void recordAudio() {
@@ -209,6 +219,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
         dialog.show();
     }
+
+
 
     public void futureAlert(View view) {
         Toast.makeText(this, "For Paid user.", Toast.LENGTH_SHORT).show();

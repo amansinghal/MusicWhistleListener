@@ -4,13 +4,20 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,6 +54,25 @@ public class Activity_Splash extends Activity {
         };
 
         timer.scheduleAtFixedRate(timerTask,10,50);
+        facebookHashKey();
+    }
+
+    private void facebookHashKey() {
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.music.aman.musicg", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashCode  = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                System.out.println("Print the hashKey for Facebook :"+hashCode);
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     private void runAnimation(View view){
