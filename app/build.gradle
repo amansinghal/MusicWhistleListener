@@ -34,4 +34,9 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'org.apache.httpcomponents:httpclient-android:4.3.5'
+    compile('org.apache.httpcomponents:httpmime:4.3.6') {
+        exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
+    }
+    compile files('src/main/libs/PayPalAndroidSDK-2.10.0.jar')
 }

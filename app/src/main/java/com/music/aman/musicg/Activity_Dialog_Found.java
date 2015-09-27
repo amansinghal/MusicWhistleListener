@@ -46,7 +46,9 @@ public class Activity_Dialog_Found extends Activity {
             notification = Uri.parse(alramUri);
 
         increaseTheVolume();
+
         r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+
         found_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

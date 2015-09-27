@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -59,12 +60,18 @@ public class Frag_After_Login extends Fragment implements View.OnClickListener {
         profile_image = (CircularImageview)view.findViewById(R.id.profile_image);
         logOutButton = (Button)view.findViewById(R.id.sign_out);
         logOutButton.setOnClickListener(this);
-        Picasso.with(getActivity()).load("https://graph.facebook.com/" + user.getFb_id() + "/picture?type=large").into(profile_image);
-        tv_addvertisment.setText(user.getAddSubcription());
-        tv_facility.setText(user.getFacilitySubcription());
+        Picasso.with(getActivity()).load("https://graph.facebook.com/" + user.getFb_id() + "/picture?type=large").resize(512,512).centerCrop().into(profile_image);
+        tv_addvertisment.setText(user.getAddSubcription().equals("0")?"Not subscribed.":(user.getAddSubcription().contains("+")?user.getAddSubcription().replace("+", ""):user.getAddSubcription())+" Days Left");
+        tv_facility.setText(user.getFacilitySubcription().equals("0")?"Not subscribed.":(user.getFacilitySubcription().contains("+")?user.getFacilitySubcription().replace("+", ""):user.getFacilitySubcription())+" Days Left");
         tv_user_name.setText(user.getName());
         sharedPreferences.edit().putBoolean(MainActivity.IS_USER_LOGGED_IN_KEY,true).putString(MainActivity.USER_INFO_KEY,user.getFb_id()+":"+user.getName()+":"+user.getEmail()).putString(MainActivity.USER_ID_KEY,user.getUid()).commit();
         //et_pass.setVisibility(View.GONE);
+        ((ImageView)view.findViewById(R.id.back)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
     }
 
 

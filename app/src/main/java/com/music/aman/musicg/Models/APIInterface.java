@@ -13,4 +13,12 @@ public  interface APIInterface {
     @FormUrlEncoded
     @POST("/index.php")
     public void getUSerInfo(@Field("tag")String tag,@Field("fb_id")String fb_id,@Field("name")String name,@Field("email")String email, Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void getUSerSubscriptionInfo(@Field("tag")String tag,@Field("user_id")String user_id,Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void getUSerSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,Callback<APIModel> apiModelCallback);
 }

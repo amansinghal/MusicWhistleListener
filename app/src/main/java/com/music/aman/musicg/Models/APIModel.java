@@ -13,6 +13,8 @@ public class APIModel
 
     private String success;
 
+    private Subcriptions subcriptions;
+
     public String getError ()
     {
         return error;
@@ -51,6 +53,14 @@ public class APIModel
     public void setSuccess (String success)
     {
         this.success = success;
+    }
+
+    public Subcriptions getSubcriptions() {
+        return subcriptions;
+    }
+
+    public void setSubcriptions(Subcriptions subcriptions) {
+        this.subcriptions = subcriptions;
     }
 
     @Override

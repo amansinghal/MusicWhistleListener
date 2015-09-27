@@ -2,6 +2,7 @@ package com.music.aman.musicg;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +10,21 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.music.aman.musicg.Models.APIInterface;
+import com.music.aman.musicg.Models.APIModel;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -26,6 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String currentRingtone;
     SharedPreferences sharedPreferences;
     ToggleButton toggleButton;
+    private ProgressDialog progressDialog;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -37,6 +48,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences(URI_KEY, MODE_PRIVATE);
         setContentView(R.layout.activity_main);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle(null);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
         initUI();
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
         runnerServiceIntent = new Intent(this, RunnerService.class);
@@ -65,7 +80,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                sharedPreferences.edit().putBoolean(FLASH_KEY, b).commit();
+                    checkSubcription(toggleButton.getId());
             }
         });
     }
@@ -117,6 +132,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 sharedPreferences.edit().putString(ALARM_TONE_KEY, "").commit();
             }
         }
+        if (resultCode == RESULT_OK && requestCode == 7) {
+                int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
+                openCorrespondingFacility(viewFor);
+        }
+
+        if (resultCode == RESULT_OK && requestCode == 8) {
+            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY,0);
+            checkSubcription(viewFor);
+        }
     }
 
     @Override
@@ -143,17 +167,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case R.id.music_tone:
-                if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
-                    checkAuthorization();
-                }else{
-
-                }
+                checkSubcription(view.getId());
                 break;
             case R.id.ring_tone:
-                getRingtoneUri();
+                checkSubcription(view.getId());
                 break;
             case R.id.record_tone:
-                recordAudio();
+                checkSubcription(view.getId());
                 break;
             case R.id.alarm_tone:
                 getAlarmUri();
@@ -164,8 +184,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void checkSubcription(int viewId){
+        if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+            checkAuthorization(viewId);
+        }else{
+            //startActivity(Activity_Paypal.getIntent(this));
+            progressDialog.show();
+            getReqFacilitySubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""),viewId);
+        }
+    }
+
     private void checkAuthorization(){
         startActivity(AuthorizationActivity.getIntent(this));
+    }
+
+    private void checkAuthorization(int viewId){
+        startActivityForResult(AuthorizationActivity.getIntent(this,viewId),8);
     }
 
     private void recordAudio() {
@@ -225,4 +259,56 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void futureAlert(View view) {
         Toast.makeText(this, "For Paid user.", Toast.LENGTH_SHORT).show();
     }
+
+    private void getReqFacilitySubcriptions(String tag, final String id ,final int viewId) {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
+
+        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+
+        apiInterface.getUSerSubscriptionInfo(tag, id, new Callback<APIModel>() {
+            @Override
+            public void success(APIModel apiModel, Response response) {
+                Log.e("APIModel", "" + apiModel.getSubcriptions());
+                progressDialog.dismiss();
+                if (apiModel.getSuccess().equals("1")) {
+                    float daysleft = Float.parseFloat(apiModel.getSubcriptions().getFacilitySubscription());
+                    if (daysleft > 0) {
+                        openCorrespondingFacility(viewId);
+                    } else {
+                        startActivityForResult(Activity_Paypal.getIntent(MainActivity.this, viewId, "facility"), 7);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                progressDialog.dismiss();
+                error.printStackTrace();
+                Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void openCorrespondingFacility(int viewId){
+        switch (viewId){
+            case R.id.music_tone:
+                getMusicUri();
+                break;
+            case R.id.ring_tone:
+                getRingtoneUri();
+                break;
+            case R.id.record_tone:
+                recordAudio();
+                break;
+            case R.id.alarm_tone:
+                getAlarmUri();
+                break;
+            case R.id.toggleBtn:
+                sharedPreferences.edit().putBoolean(FLASH_KEY,((ToggleButton)findViewById(viewId)).isChecked() ).commit();
+                break;
+        }
+    }
+
 }

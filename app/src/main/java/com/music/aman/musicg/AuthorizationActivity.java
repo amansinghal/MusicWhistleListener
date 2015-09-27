@@ -21,6 +21,7 @@ import com.music.aman.musicg.Fragments.Frag_After_Login;
 import com.music.aman.musicg.Fragments.Frag_Register;
 import com.music.aman.musicg.Models.APIInterface;
 import com.music.aman.musicg.Models.APIModel;
+import com.music.aman.musicg.Models.User;
 
 import org.json.JSONObject;
 
@@ -36,17 +37,25 @@ public class AuthorizationActivity extends Activity {
 
     private CallbackManager callbackManager;
     ProgressDialog progressDialog;
-    String API = "http://whistleandfind.com/developer/index.php";
+    public static String API = "http://whistleandfind.com/developer/index.php";
     private SharedPreferences sharedPreferences;
+    int viewForId;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, AuthorizationActivity.class);
         return intent;
     }
 
+    public static Intent getIntent(Context context,int viewFor) {
+        Intent intent = new Intent(context, AuthorizationActivity.class);
+        intent.putExtra(Activity_Paypal.VIEW_FOR_KEY,viewFor);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewForId = getIntent().getIntExtra(Activity_Paypal.VIEW_FOR_KEY,0);
         sharedPreferences = getSharedPreferences(MainActivity.URI_KEY, Context.MODE_PRIVATE);
         setContentView(R.layout.activity_authorization);
         progressDialog = new ProgressDialog(this);
@@ -126,12 +135,21 @@ public class AuthorizationActivity extends Activity {
                 Log.e("APIModel", "" + apiModel);
                 progressDialog.dismiss();
                 if (apiModel.getSuccess().equals("1")){
-                    Frag_After_Login fragAfterLogin = new Frag_After_Login();
-                    Bundle bundle = new Bundle();
                     apiModel.getUser().setFb_id(id);
-                    bundle.putSerializable("value",apiModel.getUser());
-                    fragAfterLogin.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragAfterLogin).commit();
+                    if (viewForId == 0) {
+                        Frag_After_Login fragAfterLogin = new Frag_After_Login();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("value", apiModel.getUser());
+                        fragAfterLogin.setArguments(bundle);
+                        getFragmentManager().beginTransaction().replace(R.id.container, fragAfterLogin).commit();
+                    }else{
+                        User user = apiModel.getUser();
+                        sharedPreferences.edit().putBoolean(MainActivity.IS_USER_LOGGED_IN_KEY,true).putString(MainActivity.USER_INFO_KEY,user.getFb_id()+":"+user.getName()+":"+user.getEmail()).putString(MainActivity.USER_ID_KEY,user.getUid()).commit();
+                        Intent intent = new Intent();
+                        intent.putExtra(Activity_Paypal.VIEW_FOR_KEY,viewForId);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 }else{
                     Toast.makeText(AuthorizationActivity.this,"Error while logging please try later",Toast.LENGTH_LONG).show();
                 }
