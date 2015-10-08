@@ -37,7 +37,7 @@ public class AuthorizationActivity extends Activity {
 
     private CallbackManager callbackManager;
     ProgressDialog progressDialog;
-    public static String API = "http://whistleandfind.com/developer/index.php";
+    public static String API = "http://whistleandfind.com/developer";
     private SharedPreferences sharedPreferences;
     int viewForId;
 
@@ -125,7 +125,8 @@ public class AuthorizationActivity extends Activity {
 
     private void getReq(String tag, final String id, String name, String email) {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(API).build();
+                .setEndpoint(API)
+                .setLogLevel(RestAdapter.LogLevel.FULL).build();
 
         final APIInterface apiInterface = restAdapter.create(APIInterface.class);
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="23dp"
         android:gravity="center"
-        android:text="Hey,\nDid you found me ?"/>
+        android:text="You found me !"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

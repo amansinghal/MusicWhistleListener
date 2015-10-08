@@ -24,6 +24,11 @@ android {
     }
     productFlavors {
     }
+    repositories {
+        maven {
+            url "https://mint.splunk.com/gradle/"
+        }
+    }
 }
 
 dependencies {
@@ -39,4 +44,5 @@ dependencies {
         exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
     }
     compile files('src/main/libs/PayPalAndroidSDK-2.10.0.jar')
+    compile "com.splunk.mint:mint:4.3.0"
 }

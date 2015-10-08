@@ -70,7 +70,7 @@ public class Activity_Paypal extends Activity {
     private SharedPreferences preferences;
     private ProgressDialog progressDialog;
     private String payFor;
-    private int viewFor;
+    private int viewFor,totCount=0;
 
     enum paymentFor{
         ADDVERTISMENT,FACILITY
@@ -232,8 +232,13 @@ public class Activity_Paypal extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
+                error.printStackTrace();
                 progressDialog.dismiss();
-                Toast.makeText(Activity_Paypal.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                if (totCount < 2){
+                    updateFacilitySubcription();
+                    totCount++;
+                }
+                Toast.makeText(Activity_Paypal.this,error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
