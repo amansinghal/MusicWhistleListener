@@ -30,8 +30,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",
             IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY",USER_INFO_KEY="USER_INFO_KEY",USER_ID_KEY="USER_ID_KEY";
-    ImageView iv_back,profile;
-    TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
+    ImageView iv_back,profile,whistle_on_off;
+    TextView  tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
     String currentRingtone;
     SharedPreferences sharedPreferences;
@@ -66,8 +66,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tv_advertisement.setOnClickListener(this);
         tv_select_music_ringtone = (TextView) findViewById(R.id.select_music);
         //tv_select_music_ringtone.setOnClickListener(this);
-        tv_whistle = (TextView) findViewById(R.id.whistle_listener);
-        tv_whistle.setOnClickListener(this);
+        whistle_on_off = (ImageView) findViewById(R.id.whistle_listener);
+        whistle_on_off.setOnClickListener(this);
         tv_alarm = (TextView) findViewById(R.id.alarm_tone);
         tv_alarm.setOnClickListener(this);
         tv_ringtone = (TextView) findViewById(R.id.ring_tone);

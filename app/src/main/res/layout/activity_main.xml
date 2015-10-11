@@ -16,7 +16,10 @@
         android:id="@+id/profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_face_black_36dp" />
 
@@ -33,22 +36,19 @@
         android:textColor="#fff"
         android:textSize="34dp" />
 
-    <TextView
+    <ImageView
         android:id="@+id/whistle_listener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/record_tone"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
         android:visibility="visible"
-        android:background="@drawable/bg_rectangle"
-        android:drawableLeft="@drawable/headphone"
-        android:drawablePadding="10dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:text="Whistle Listener   "
+        android:paddingTop="10dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:layout_toLeftOf="@+id/profile"
+        android:src="@drawable/ic_settings_black_36dp"
         android:textColor="#fff"
-        android:textSize="23dp" />
+        />
 
     <TextView
         android:id="@+id/advertisment"
