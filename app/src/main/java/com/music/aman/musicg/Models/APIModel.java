@@ -1,5 +1,8 @@
 package com.music.aman.musicg.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by AmaN on 9/26/2015.
  */
@@ -15,6 +18,17 @@ public class APIModel
 
     private Subcriptions subcriptions;
 
+    private String image_path;
+
+    private ArrayList<Addvertisment> addvertisment;
+
+    public ArrayList<Addvertisment> getAddvertisment() {
+        return addvertisment;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
 
     public String getError ()
     {

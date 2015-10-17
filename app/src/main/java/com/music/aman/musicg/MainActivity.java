@@ -141,13 +141,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY,0);
             checkSubcription(viewFor);
         }
+
+        if (resultCode == RESULT_OK && requestCode == 9) {
+            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
+            openCorrespondingFacility(viewFor);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.advertisment:
-                futureAlert(view);
+                checkSubcription(view.getId());
                 break;
             case R.id.whistle_listener:
                 if (Utils.isMyServiceRunning(RunnerService.class, MainActivity.this))
@@ -199,7 +204,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void checkAuthorization(int viewId){
-        startActivityForResult(AuthorizationActivity.getIntent(this,viewId),8);
+        startActivityForResult(AuthorizationActivity.getIntent(this, viewId), 8);
     }
 
     private void recordAudio() {
@@ -291,8 +296,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    private void getReqAddSubcriptions(String tag, final String id ,final int viewId) {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
+
+        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+
+        apiInterface.getUSerSubscriptionInfo(tag, id, new Callback<APIModel>() {
+            @Override
+            public void success(APIModel apiModel, Response response) {
+                Log.e("APIModel", "" + apiModel.getSubcriptions());
+                progressDialog.dismiss();
+                if (apiModel.getSuccess().equals("1")) {
+                    float daysleft = Float.parseFloat(apiModel.getSubcriptions().getAddSubscription());
+                    if (daysleft > 0) {
+                        openCorrespondingFacility(viewId);
+                    } else {
+                        startActivityForResult(Activity_Paypal.getIntent(MainActivity.this, viewId, "advertisement"), 9);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                progressDialog.dismiss();
+                error.printStackTrace();
+                Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void openCorrespondingFacility(int viewId){
         switch (viewId){
+            case R.id.advertisment:
+
+                break;
             case R.id.music_tone:
                 getMusicUri();
                 break;
