@@ -144,7 +144,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (resultCode == RESULT_OK && requestCode == 9) {
             int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
-            openCorrespondingFacility(viewFor);
+            checkSubcription(viewFor);
         }
     }
 
@@ -195,6 +195,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }else{
             //startActivity(Activity_Paypal.getIntent(this));
             progressDialog.show();
+            if (viewId == R.id.advertisment) {
+                getReqAddSubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""), viewId);
+                return;
+            }
             getReqFacilitySubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""),viewId);
         }
     }
@@ -330,7 +334,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void openCorrespondingFacility(int viewId){
         switch (viewId){
             case R.id.advertisment:
-
+                startActivity(Activity_Advertisement.getIntent(this));
                 break;
             case R.id.music_tone:
                 getMusicUri();
