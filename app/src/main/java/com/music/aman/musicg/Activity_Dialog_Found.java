@@ -101,7 +101,10 @@ public class Activity_Dialog_Found extends Activity {
 
     public void NotifyWithFlash() {
         while (ShouldIGlow) {
-            flashON();
+            try{
+            flashON();}catch (Exception e){
+
+            }
             try {
                 Thread.sleep(1000);
                 flashOFF();
