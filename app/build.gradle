@@ -24,12 +24,18 @@ android {
     }
     productFlavors {
     }
+    repositories {
+        maven {
+            url "https://mint.splunk.com/gradle/"
+        }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('src/main/libs/musicg-1.4.2.0.jar')
-    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
     compile files('src/main/libs/musicg.jar')
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
@@ -39,4 +45,6 @@ dependencies {
         exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
     }
     compile files('src/main/libs/PayPalAndroidSDK-2.10.0.jar')
+    compile "com.splunk.mint:mint:4.3.0"
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

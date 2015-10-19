@@ -30,8 +30,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",
             IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY",USER_INFO_KEY="USER_INFO_KEY",USER_ID_KEY="USER_ID_KEY";
-    ImageView iv_back,profile;
-    TextView tv_whistle, tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
+    ImageView iv_back,profile,whistle_on_off;
+    TextView  tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
     String currentRingtone;
     SharedPreferences sharedPreferences;
@@ -66,8 +66,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tv_advertisement.setOnClickListener(this);
         tv_select_music_ringtone = (TextView) findViewById(R.id.select_music);
         //tv_select_music_ringtone.setOnClickListener(this);
-        tv_whistle = (TextView) findViewById(R.id.whistle_listener);
-        tv_whistle.setOnClickListener(this);
+        whistle_on_off = (ImageView) findViewById(R.id.whistle_listener);
+        whistle_on_off.setOnClickListener(this);
         tv_alarm = (TextView) findViewById(R.id.alarm_tone);
         tv_alarm.setOnClickListener(this);
         tv_ringtone = (TextView) findViewById(R.id.ring_tone);
@@ -141,13 +141,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY,0);
             checkSubcription(viewFor);
         }
+
+        if (resultCode == RESULT_OK && requestCode == 9) {
+            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
+            openCorrespondingFacility(viewFor);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.advertisment:
-                futureAlert(view);
+                checkSubcription(view.getId());
                 break;
             case R.id.whistle_listener:
                 if (Utils.isMyServiceRunning(RunnerService.class, MainActivity.this))
@@ -199,7 +204,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void checkAuthorization(int viewId){
-        startActivityForResult(AuthorizationActivity.getIntent(this,viewId),8);
+        startActivityForResult(AuthorizationActivity.getIntent(this, viewId), 8);
     }
 
     private void recordAudio() {
@@ -291,8 +296,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    private void getReqAddSubcriptions(String tag, final String id ,final int viewId) {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
+
+        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+
+        apiInterface.getUSerSubscriptionInfo(tag, id, new Callback<APIModel>() {
+            @Override
+            public void success(APIModel apiModel, Response response) {
+                Log.e("APIModel", "" + apiModel.getSubcriptions());
+                progressDialog.dismiss();
+                if (apiModel.getSuccess().equals("1")) {
+                    float daysleft = Float.parseFloat(apiModel.getSubcriptions().getAddSubscription());
+                    if (daysleft > 0) {
+                        openCorrespondingFacility(viewId);
+                    } else {
+                        startActivityForResult(Activity_Paypal.getIntent(MainActivity.this, viewId, "advertisement"), 9);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                progressDialog.dismiss();
+                error.printStackTrace();
+                Toast.makeText(MainActivity.this, "Error while logging please try later", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void openCorrespondingFacility(int viewId){
         switch (viewId){
+            case R.id.advertisment:
+
+                break;
             case R.id.music_tone:
                 getMusicUri();
                 break;

@@ -4,7 +4,10 @@ import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.mime.TypedFile;
 
 /**
  * Created by AmaN on 9/26/2015.
@@ -21,4 +24,12 @@ public  interface APIInterface {
     @FormUrlEncoded
     @POST("/index.php")
     public void getUSerSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,Callback<APIModel> apiModelCallback);
+
+    @Multipart
+    @POST("/upload.php")
+    public void upload(@Part("fileToUpload")TypedFile file,@Part("uid")String uid,@Field("url")String url,Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void getMyAdds(@Field("tag")String tag,@Field("uid")String user_id,Callback<APIModel> apiModelCallback);
 }
