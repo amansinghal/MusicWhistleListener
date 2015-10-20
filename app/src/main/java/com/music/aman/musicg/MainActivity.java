@@ -20,6 +20,10 @@ import android.widget.ToggleButton;
 
 import com.music.aman.musicg.Models.APIInterface;
 import com.music.aman.musicg.Models.APIModel;
+import com.squareup.picasso.Picasso;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -37,6 +41,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SharedPreferences sharedPreferences;
     ToggleButton toggleButton;
     private ProgressDialog progressDialog;
+    ImageView ivAdView;
+    Timer timer;
+    int i=0;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -55,6 +62,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initUI();
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
         runnerServiceIntent = new Intent(this, RunnerService.class);
+        timer = new Timer();
+        getAdds();
     }
 
     private void initUI() {
@@ -81,6 +90,56 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     checkSubcription(toggleButton.getId());
+            }
+        });
+        ivAdView = (ImageView)findViewById(R.id.ad_view);
+        ivAdView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void getAdds(){
+        progressDialog.show();
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).setLogLevel(RestAdapter.LogLevel.FULL).build();
+
+        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+
+        apiInterface.getMyAdds("myaddvertisment","", new Callback<APIModel>() {
+            @Override
+            public void success(final APIModel apiModel, Response response) {
+                System.out.println(apiModel);
+                progressDialog.dismiss();
+
+                if (!apiModel.getAddvertisment().isEmpty()){
+
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+
+                            if (i==apiModel.getAddvertisment().size()){
+                                i=0;
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Log.e("Image URL",apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url());
+                                    Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url()).into(ivAdView);
+                                }
+                            });
+                        }
+                    },0,5000);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -209,6 +268,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void checkAuthorization(int viewId){
         startActivityForResult(AuthorizationActivity.getIntent(this, viewId), 8);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
     }
 
     private void recordAudio() {

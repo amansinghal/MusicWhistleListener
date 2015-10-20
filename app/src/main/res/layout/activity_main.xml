@@ -183,5 +183,12 @@
         android:textSize="23dp" />
 
 
+    <ImageView
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="#fff"
+        android:adjustViewBounds="true"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

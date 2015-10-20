@@ -16,11 +16,17 @@ public class APIModel
 
     private String success;
 
+    private String replyMsg;
+
     private Subcriptions subcriptions;
 
     private String image_path;
 
     private ArrayList<Addvertisment> addvertisment;
+
+    public String getReplyMsg() {
+        return replyMsg;
+    }
 
     public ArrayList<Addvertisment> getAddvertisment() {
         return addvertisment;

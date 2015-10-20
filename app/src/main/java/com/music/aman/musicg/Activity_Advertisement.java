@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.music.aman.musicg.Fragments.Frag_MyAds;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by AmaN on 10/17/2015.
@@ -36,6 +37,7 @@ public class Activity_Advertisement extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisement);
+        ButterKnife.bind(this);
         preferences = getSharedPreferences(MainActivity.URI_KEY, MODE_PRIVATE);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(null);
@@ -56,5 +58,8 @@ public class Activity_Advertisement extends Activity {
         }
     }
 
+    public void setTvTitle(String title){
+        tvTitle.setText(title);
+    }
 
 }

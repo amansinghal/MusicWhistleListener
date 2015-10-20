@@ -47,4 +47,5 @@ dependencies {
     compile files('src/main/libs/PayPalAndroidSDK-2.10.0.jar')
     compile "com.splunk.mint:mint:4.3.0"
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'io.nlopez.smartadapters:library:1.2.3'
 }

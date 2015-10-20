@@ -16,6 +16,12 @@ public class Addvertisment implements Serializable
 
     private String url;
 
+    private String clicks;
+
+    public String getClicks() {
+        return clicks;
+    }
+
     public String getId ()
     {
         return id;
