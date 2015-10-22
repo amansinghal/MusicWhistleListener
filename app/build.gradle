@@ -45,7 +45,9 @@ dependencies {
         exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
     }
     compile files('src/main/libs/PayPalAndroidSDK-2.10.0.jar')
-    compile "com.splunk.mint:mint:4.3.0"
+    compile 'com.splunk.mint:mint:4.3.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'io.nlopez.smartadapters:library:1.2.3'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile project(':simple-crop-image-lib')
 }

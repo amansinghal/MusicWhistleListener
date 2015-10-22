@@ -27,9 +27,13 @@ public  interface APIInterface {
 
     @Multipart
     @POST("/upload.php")
-    public void upload(@Part("fileToUpload")TypedFile file,@Part("uid")String uid,@Field("url")String url,Callback<APIModel> apiModelCallback);
+    public void upload(@Part("fileToUpload")TypedFile file,@Part("ad_id")String ad_id,@Part("uid")String uid,@Part("url")String url,Callback<APIModel> apiModelCallback);
 
     @FormUrlEncoded
     @POST("/index.php")
     public void getMyAdds(@Field("tag")String tag,@Field("uid")String user_id,Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void deleteAdds(@Field("tag")String tag,@Field("ad_id")String ad_id,Callback<APIModel> apiModelCallback);
 }

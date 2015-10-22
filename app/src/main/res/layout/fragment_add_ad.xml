@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <ImageView
+        android:id="@+id/frag_add_ad_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="10dp"
+        />
+    <Button
+        android:id="@+id/frag_add_ad_btn_add_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Click here to add Advertisement image"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_rectangle"/>
+    <EditText
+        android:id="@+id/frag_add_ad_et_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:maxLines="2"
+        android:hint="Url like: http://www.yourdesirewebsite.com"/>
+
+    <Button
+        android:id="@+id/frag_add_ad_btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save &amp; Broadcast"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_rectangle"/>
+
+
+</LinearLayout>

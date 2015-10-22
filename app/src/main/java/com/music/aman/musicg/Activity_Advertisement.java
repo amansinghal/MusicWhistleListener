@@ -1,6 +1,7 @@
 package com.music.aman.musicg;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +10,12 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.music.aman.musicg.Fragments.Frag_Add_Ad;
 import com.music.aman.musicg.Fragments.Frag_MyAds;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by AmaN on 10/17/2015.
@@ -22,7 +25,7 @@ public class Activity_Advertisement extends Activity {
     @Bind(R.id.back)
     ImageView ivBack;
     @Bind(R.id.add_ad)
-    ImageView ivAddAd;
+    public ImageView ivAddAd;
     @Bind(R.id.activity_ad_title)
     TextView tvTitle;
     public ProgressDialog progressDialog;
@@ -60,6 +63,28 @@ public class Activity_Advertisement extends Activity {
 
     public void setTvTitle(String title){
         tvTitle.setText(title);
+    }
+
+    @OnClick(R.id.add_ad)
+    public void addAd(){
+        getFragmentManager().beginTransaction().replace(R.id.ad_container, new Frag_Add_Ad()).addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.back)
+    public void onBackClick(){
+        if (checkPopBack())
+            finish();
+    }
+
+    private boolean checkPopBack(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+            return false;
+        } else {
+            super.onBackPressed();
+            return true;
+        }
     }
 
 }

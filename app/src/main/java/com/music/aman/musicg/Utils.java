@@ -1,7 +1,9 @@
 package com.music.aman.musicg;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,15 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.music.aman.musicg.Models.APIInterface;
+import com.squareup.okhttp.OkHttpClient;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 /**
  * Created by AmaN on 8/22/2015.
@@ -90,4 +99,45 @@ public class Utils {
         } catch (Exception e) {
         }
     }
+
+    public static APIInterface getAdapterWebService(){
+        OkHttpClient mOkHttpClient = new OkHttpClient();
+        mOkHttpClient.setConnectTimeout(5, TimeUnit.MINUTES);
+        mOkHttpClient.setReadTimeout(5, TimeUnit.MINUTES);
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).setClient(new OkClient(mOkHttpClient)).build();
+        restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
+        return  restAdapter.create(APIInterface.class);
+    }
+
+    public static void showDialog(Context context, String message, String positiveText, DialogInterface.OnClickListener posClick, String negativeText, DialogInterface.OnClickListener negClick) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setMessage(message);
+        builder1.setCancelable(true);
+        builder1.setPositiveButton(positiveText, posClick);
+        builder1.setNegativeButton(negativeText, negClick);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    public static void showDialog(Context context, String message) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setMessage(message);
+        builder1.setCancelable(true);
+        builder1.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    public static void showDialogWithListSelection(Context context, String title, CharSequence[] array, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(title);
+        dialog.setSingleChoiceItems(array, 0, listener);
+        dialog.show();
+    }
+
 }

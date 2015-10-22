@@ -3,6 +3,7 @@ package com.music.aman.musicg;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,9 +34,9 @@ import retrofit.client.Response;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",
-            IS_USER_LOGGED_IN_KEY="IS_USER_LOGGED_IN_KEY",USER_INFO_KEY="USER_INFO_KEY",USER_ID_KEY="USER_ID_KEY";
-    ImageView iv_back,profile,whistle_on_off;
-    TextView  tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
+            IS_USER_LOGGED_IN_KEY = "IS_USER_LOGGED_IN_KEY", USER_INFO_KEY = "USER_INFO_KEY", USER_ID_KEY = "USER_ID_KEY";
+    ImageView iv_back, profile, whistle_on_off;
+    TextView tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
     String currentRingtone;
     SharedPreferences sharedPreferences;
@@ -43,7 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ProgressDialog progressDialog;
     ImageView ivAdView;
     Timer timer;
-    int i=0;
+    int i = 0;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -89,10 +90,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    checkSubcription(toggleButton.getId());
+                checkSubcription(toggleButton.getId());
             }
         });
-        ivAdView = (ImageView)findViewById(R.id.ad_view);
+        ivAdView = (ImageView) findViewById(R.id.ad_view);
         ivAdView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,45 +102,91 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void getAdds(){
-        progressDialog.show();
+    private void getAdds() {
+
 
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).setLogLevel(RestAdapter.LogLevel.FULL).build();
 
         final APIInterface apiInterface = restAdapter.create(APIInterface.class);
 
-        apiInterface.getMyAdds("myaddvertisment","", new Callback<APIModel>() {
+        apiInterface.getMyAdds("myaddvertisment", "", new Callback<APIModel>() {
             @Override
             public void success(final APIModel apiModel, Response response) {
                 System.out.println(apiModel);
-                progressDialog.dismiss();
 
-                if (!apiModel.getAddvertisment().isEmpty()){
+                if (!apiModel.getAddvertisment().isEmpty()) {
+
+
+                    if (timer != null) {
+                        timer.cancel();
+                        timer.purge();
+                        timer = null;
+                    }
+
+                    timer = new Timer();
 
                     timer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
 
-                            if (i==apiModel.getAddvertisment().size()){
-                                i=0;
+                            if (i == apiModel.getAddvertisment().size()) {
+                                i = 0;
+                                getAdds();
+                                return;
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     //Log.e("Image URL",apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url());
-                                    Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url()).into(ivAdView);
+                                    try {
+                                        ivAdView.setOnClickListener(null);
+                                        final int pos = i;
+                                        Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url()).into(ivAdView, new com.squareup.picasso.Callback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                ivAdView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        try {
+                                                        String strUrl = apiModel.getAddvertisment().get(pos).getUrl();
+                                                        if (!strUrl.startsWith("http://") && !strUrl.startsWith("https://")) {
+                                                            strUrl = "http://" + strUrl;
+                                                        }
+
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
+
+
+                                                            startActivity(intent);
+                                                        }
+                                                        catch (ActivityNotFoundException ac) {
+                                                            Toast.makeText(MainActivity.this, "No browser installed in your device to view this web page.", Toast.LENGTH_LONG).show();
+                                                        }
+                                                        catch (Exception e1){
+                                                            e1.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onError() {
+
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
                         }
-                    },0,5000);
+                    }, 0, 5000);
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
-                progressDialog.dismiss();
-                Toast.makeText(MainActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -192,12 +239,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         if (resultCode == RESULT_OK && requestCode == 7) {
-                int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
-                openCorrespondingFacility(viewFor);
+            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
+            openCorrespondingFacility(viewFor);
         }
 
         if (resultCode == RESULT_OK && requestCode == 8) {
-            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY,0);
+            int viewFor = data.getIntExtra(Activity_Paypal.VIEW_FOR_KEY, 0);
             checkSubcription(viewFor);
         }
 
@@ -224,9 +271,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.select_music:
                 //futureAlert(view);
-                if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+                if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY, false)) {
                     checkAuthorization();
-                }else{
+                } else {
 
                 }
                 break;
@@ -248,25 +295,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void checkSubcription(int viewId){
-        if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY,false)){
+    private void checkSubcription(int viewId) {
+        if (!sharedPreferences.getBoolean(IS_USER_LOGGED_IN_KEY, false)) {
             checkAuthorization(viewId);
-        }else{
+        } else {
             //startActivity(Activity_Paypal.getIntent(this));
             progressDialog.show();
             if (viewId == R.id.advertisment) {
                 getReqAddSubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""), viewId);
                 return;
             }
-            getReqFacilitySubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""),viewId);
+            getReqFacilitySubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""), viewId);
         }
     }
 
-    private void checkAuthorization(){
+    private void checkAuthorization() {
         startActivity(AuthorizationActivity.getIntent(this));
     }
 
-    private void checkAuthorization(int viewId){
+    private void checkAuthorization(int viewId) {
         startActivityForResult(AuthorizationActivity.getIntent(this, viewId), 8);
     }
 
@@ -286,6 +333,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onResume() {
         if (!Utils.isMyServiceRunning(RunnerService.class, this))
             startService(runnerServiceIntent);
+
+        getAdds();
+
         super.onResume();
     }
 
@@ -329,12 +379,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
-
     public void futureAlert(View view) {
         Toast.makeText(this, "For Paid user.", Toast.LENGTH_SHORT).show();
     }
 
-    private void getReqFacilitySubcriptions(String tag, final String id ,final int viewId) {
+    private void getReqFacilitySubcriptions(String tag, final String id, final int viewId) {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
 
         final APIInterface apiInterface = restAdapter.create(APIInterface.class);
@@ -365,7 +414,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void getReqAddSubcriptions(String tag, final String id ,final int viewId) {
+    private void getReqAddSubcriptions(String tag, final String id, final int viewId) {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
 
         final APIInterface apiInterface = restAdapter.create(APIInterface.class);
@@ -396,9 +445,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void openCorrespondingFacility(int viewId){
-        switch (viewId){
+    private void openCorrespondingFacility(int viewId) {
+        switch (viewId) {
             case R.id.advertisment:
+                if (timer != null) {
+                    timer.cancel();
+                    timer.purge();
+                    timer = null;
+                }
                 startActivity(Activity_Advertisement.getIntent(this));
                 break;
             case R.id.music_tone:
@@ -414,7 +468,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 getAlarmUri();
                 break;
             case R.id.toggleBtn:
-                sharedPreferences.edit().putBoolean(FLASH_KEY,((ToggleButton)findViewById(viewId)).isChecked() ).commit();
+                sharedPreferences.edit().putBoolean(FLASH_KEY, ((ToggleButton) findViewById(viewId)).isChecked()).commit();
                 break;
         }
     }

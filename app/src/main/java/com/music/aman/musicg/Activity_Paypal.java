@@ -22,15 +22,18 @@ import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 /**
@@ -214,9 +217,8 @@ public class Activity_Paypal extends Activity {
 
     private void updateFacilitySubcription() {
         progressDialog.show();
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
 
-        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+        final APIInterface apiInterface = Utils.getAdapterWebService();
 
         apiInterface.getUSerSubscriptionUpdate("updatefacilitySubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15", new Callback<APIModel>() {
             @Override
@@ -249,9 +251,8 @@ public class Activity_Paypal extends Activity {
 
     private void updateAdSubcription() {
         progressDialog.show();
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).build();
 
-        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+        final APIInterface apiInterface = Utils.getAdapterWebService();
 
         apiInterface.getUSerSubscriptionUpdate("addSubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15", new Callback<APIModel>() {
             @Override

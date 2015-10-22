@@ -16,14 +16,15 @@
 
         <TextView
             android:id="@+id/activity_ad_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
             android:text="Home"
+            android:gravity="center"
             android:textColor="#c94242"
-            android:textSize="34dp" />
+            android:layout_toRightOf="@+id/back"
+            android:layout_toLeftOf="@+id/add_ad"
+            android:textSize="25dp" />
 
         <ImageView
             android:id="@+id/add_ad"

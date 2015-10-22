@@ -31,10 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="Home"
         android:textColor="#fff"
-        android:textSize="34dp" />
+        android:textSize="25dp" />
 
     <ImageView
         android:id="@+id/whistle_listener"
@@ -185,10 +185,12 @@
 
     <ImageView
         android:id="@+id/ad_view"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#fff"
         android:adjustViewBounds="true"
+        android:maxHeight="54dp"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

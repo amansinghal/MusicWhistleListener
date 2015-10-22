@@ -84,6 +84,8 @@
             android:name="com.paypal.android.sdk.payments.PayPalService"
             android:exported="false" />
 
+        <activity android:name="eu.janmuller.android.simplecropimage.CropImage"/>
+
         <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
         <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />

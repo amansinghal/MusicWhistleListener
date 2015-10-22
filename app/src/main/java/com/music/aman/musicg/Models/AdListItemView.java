@@ -2,6 +2,7 @@ package com.music.aman.musicg.Models;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,13 +21,15 @@ import io.nlopez.smartadapters.views.BindableLayout;
  */
 public class AdListItemView extends BindableLayout<Addvertisment> {
 
-    @Bind(R.id.item_ad_imageview)
+    @Bind(R.id.item_ad_iv_ad_image)
     ImageView ivAdmage;
-    @Bind(R.id.item_ad_iv_delete)
+    @Bind(R.id.item_ad_delete)
     ImageView ivDelete;
-    @Bind(R.id.item_ad_tv_click)
+    @Bind(R.id.item_ad_edit)
+    ImageView ivEdit;
+    @Bind(R.id.item_ad_click)
     TextView tvClick;
-    @Bind(R.id.item_ad_tv_url)
+    @Bind(R.id.item_ad_url)
     TextView tvUrl;
 
     public AdListItemView(Context context) {
@@ -40,7 +43,23 @@ public class AdListItemView extends BindableLayout<Addvertisment> {
     }
 
     @Override
-    public void bind(Addvertisment addvertisment) {
+    public void bind(final Addvertisment addvertisment) {
+
+        ivDelete.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notifyItemAction(view.getId(),addvertisment,view);
+            }
+        });
+
+        ivEdit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notifyItemAction(view.getId(),addvertisment,view);
+            }
+        });
+
+
         Picasso.with(getContext()).load("http://whistleandfind.com/developer/add_pictures/" + addvertisment.getImage_url()).into(ivAdmage);
         tvClick.setText(Html.fromHtml("<b>Clicks:  </b>" + addvertisment.getClicks()));
         try {
