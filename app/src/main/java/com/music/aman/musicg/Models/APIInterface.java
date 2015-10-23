@@ -23,7 +23,7 @@ public  interface APIInterface {
 
     @FormUrlEncoded
     @POST("/index.php")
-    public void getUSerSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,Callback<APIModel> apiModelCallback);
+    public void getUSerSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,@Field("type")String type,Callback<APIModel> apiModelCallback);
 
     @Multipart
     @POST("/upload.php")
@@ -32,6 +32,10 @@ public  interface APIInterface {
     @FormUrlEncoded
     @POST("/index.php")
     public void getMyAdds(@Field("tag")String tag,@Field("uid")String user_id,Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void getPayments(@Field("tag")String tag,@Field("uid")String user_id,Callback<APIModel> apiModelCallback);
 
     @FormUrlEncoded
     @POST("/index.php")

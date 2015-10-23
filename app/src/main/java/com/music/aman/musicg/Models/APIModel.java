@@ -24,8 +24,14 @@ public class APIModel
 
     private ArrayList<Addvertisment> addvertisment;
 
+    private ArrayList<Payments> payments;
+
     public String getReplyMsg() {
         return replyMsg;
+    }
+
+    public ArrayList<Payments> getPaymentses() {
+        return payments;
     }
 
     public ArrayList<Addvertisment> getAddvertisment() {

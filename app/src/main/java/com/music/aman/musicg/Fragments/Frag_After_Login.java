@@ -35,7 +35,7 @@ public class Frag_After_Login extends Fragment implements View.OnClickListener {
     View view;
     CircularImageview profile_image;
     ProgressDialog dialog;
-    private Button logOutButton;
+    private Button logOutButton,paymentHistory;
     private CallbackManager callbackManager;
     User user;
     SharedPreferences sharedPreferences;
@@ -54,6 +54,13 @@ public class Frag_After_Login extends Fragment implements View.OnClickListener {
     }
 
     private void initUI() {
+        paymentHistory = (Button)view.findViewById(R.id.payment_history);
+        paymentHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().beginTransaction().add(R.id.container, new Frag_Payment_History()).addToBackStack(null).commit();
+            }
+        });
         tv_addvertisment = (TextView)view.findViewById(R.id.subscription_text);
         tv_facility = (TextView)view.findViewById(R.id.facility_text);
         tv_user_name = (TextView)view.findViewById(R.id.user_name);

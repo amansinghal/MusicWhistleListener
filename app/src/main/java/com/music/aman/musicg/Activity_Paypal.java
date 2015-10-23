@@ -220,7 +220,7 @@ public class Activity_Paypal extends Activity {
 
         final APIInterface apiInterface = Utils.getAdapterWebService();
 
-        apiInterface.getUSerSubscriptionUpdate("updatefacilitySubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15", new Callback<APIModel>() {
+        apiInterface.getUSerSubscriptionUpdate("updatefacilitySubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15","Paypal", new Callback<APIModel>() {
             @Override
             public void success(APIModel apiModel, Response response) {
                 System.out.println(apiModel);
@@ -254,7 +254,7 @@ public class Activity_Paypal extends Activity {
 
         final APIInterface apiInterface = Utils.getAdapterWebService();
 
-        apiInterface.getUSerSubscriptionUpdate("addSubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15", new Callback<APIModel>() {
+        apiInterface.getUSerSubscriptionUpdate("addSubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15","Paypal", new Callback<APIModel>() {
             @Override
             public void success(APIModel apiModel, Response response) {
                 System.out.println(apiModel);

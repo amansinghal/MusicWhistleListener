@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
+        android:layout_below="@+id/user_name"
         android:layout_marginRight="20dp"
         android:orientation="vertical">
 
@@ -81,6 +82,18 @@
             android:textColor="@android:color/black"
             android:text="18-05-2015"
             android:textSize="25sp" />
+        <Button
+            android:id="@+id/payment_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_rectangle"
+            android:text="Payment history"
+            android:textColor="#fff" />
     </LinearLayout>
 
     <Button
