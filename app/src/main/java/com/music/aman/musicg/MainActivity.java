@@ -13,8 +13,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import eu.janmuller.android.simplecropimage.Util;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -34,7 +37,7 @@ import retrofit.client.Response;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     public static String URI_KEY = "uri_key", ALARM_TONE_KEY = "alarm_tone_key", FLASH_KEY = "flash_key",
-            IS_USER_LOGGED_IN_KEY = "IS_USER_LOGGED_IN_KEY", USER_INFO_KEY = "USER_INFO_KEY", USER_ID_KEY = "USER_ID_KEY";
+            IS_USER_LOGGED_IN_KEY = "IS_USER_LOGGED_IN_KEY", USER_INFO_KEY = "USER_INFO_KEY", USER_ID_KEY = "USER_ID_KEY",USER_WANT_SERICE="USER_WANT_SERICE";
     ImageView iv_back, profile, whistle_on_off;
     TextView tv_advertisement, tv_select_music_ringtone, tv_alarm, tv_ringtone, tv_music, tv_record;
     Intent runnerServiceIntent;
@@ -42,9 +45,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SharedPreferences sharedPreferences;
     ToggleButton toggleButton;
     private ProgressDialog progressDialog;
-    ImageView ivAdView;
+    LinearLayout adView;
     Timer timer;
-    int i = 0;
+    int i = 0,adWidth;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -65,6 +68,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         runnerServiceIntent = new Intent(this, RunnerService.class);
         timer = new Timer();
         getAdds();
+        adWidth = Utils.getWidthHeight(this)[0] / 5;
     }
 
     private void initUI() {
@@ -93,8 +97,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 checkSubcription(toggleButton.getId());
             }
         });
-        ivAdView = (ImageView) findViewById(R.id.ad_view);
-        ivAdView.setOnClickListener(new View.OnClickListener() {
+        adView = (LinearLayout) findViewById(R.id.ad_view);
+        adView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -129,7 +133,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void run() {
 
-                            if (i == apiModel.getAddvertisment().size()) {
+                            if ((5 + i) >= apiModel.getAddvertisment().size()) {
                                 i = 0;
                                 getAdds();
                                 return;
@@ -139,47 +143,64 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 public void run() {
                                     //Log.e("Image URL",apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url());
                                     try {
-                                        ivAdView.setOnClickListener(null);
+
+                                        adView.removeAllViews();
+
                                         final int pos = i;
-                                        Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(i++).getImage_url()).into(ivAdView, new com.squareup.picasso.Callback() {
-                                            @Override
-                                            public void onSuccess() {
-                                                ivAdView.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        try {
-                                                        String strUrl = apiModel.getAddvertisment().get(pos).getUrl();
-                                                        if (!strUrl.startsWith("http://") && !strUrl.startsWith("https://")) {
-                                                            strUrl = "http://" + strUrl;
+
+                                        int endPos = apiModel.getAddvertisment().size() > ( 5 + i) ? (5 + i) : apiModel.getAddvertisment().size();
+
+                                        for (int j = 0+i ;j < endPos ; j++){
+
+                                            Log.e("Positions", "" + j + "URL" + apiModel.getImage_path() + apiModel.getAddvertisment().get(j).getImage_url());
+
+                                            ImageView imageView = new ImageView(MainActivity.this);
+
+                                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+                                            Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(j).getImage_url()).resize(adWidth,adWidth).into(imageView, new com.squareup.picasso.Callback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    adView.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            try {
+                                                                String strUrl = apiModel.getAddvertisment().get(pos).getUrl();
+                                                                if (!strUrl.startsWith("http://") && !strUrl.startsWith("https://")) {
+                                                                    strUrl = "http://" + strUrl;
+                                                                }
+
+                                                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
+
+
+                                                                startActivity(intent);
+                                                            } catch (ActivityNotFoundException ac) {
+                                                                Toast.makeText(MainActivity.this, "No browser installed in your device to view this web page.", Toast.LENGTH_LONG).show();
+                                                            } catch (Exception e1) {
+                                                                e1.printStackTrace();
+                                                            }
                                                         }
+                                                    });
+                                                }
 
-                                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
+                                                @Override
+                                                public void onError() {
 
+                                                }
+                                            });
 
-                                                            startActivity(intent);
-                                                        }
-                                                        catch (ActivityNotFoundException ac) {
-                                                            Toast.makeText(MainActivity.this, "No browser installed in your device to view this web page.", Toast.LENGTH_LONG).show();
-                                                        }
-                                                        catch (Exception e1){
-                                                            e1.printStackTrace();
-                                                        }
-                                                    }
-                                                });
-                                            }
+                                            adView.addView(imageView);
+                                        }
 
-                                            @Override
-                                            public void onError() {
+                                        i++;
 
-                                            }
-                                        });
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                 }
                             });
                         }
-                    }, 0, 5000);
+                    }, 0, 6000);
                 }
             }
 
@@ -331,7 +352,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onResume() {
-        if (!Utils.isMyServiceRunning(RunnerService.class, this))
+
+        if (!Utils.isMyServiceRunning(RunnerService.class, this) && sharedPreferences.getBoolean(USER_WANT_SERICE,true))
             startService(runnerServiceIntent);
 
         getAdds();
@@ -348,6 +370,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (RunnerService.runnerIntent != null)
                     RunnerService.runnerIntent.stopSelf();
+                    sharedPreferences.edit().putBoolean(USER_WANT_SERICE,false).commit();
             }
         });
         dialog.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
@@ -367,6 +390,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 startService(runnerServiceIntent);
+                sharedPreferences.edit().putBoolean(USER_WANT_SERICE,true).commit();
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

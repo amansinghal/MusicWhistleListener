@@ -190,8 +190,8 @@ public class Frag_Add_Ad extends Fragment {
         intent.putExtra(CropImage.SCALE, true);
 
         // if the aspect ratio is fixed to ratio 3/2
-        intent.putExtra(CropImage.ASPECT_X, 4);
-        intent.putExtra(CropImage.ASPECT_Y, 1);
+        intent.putExtra(CropImage.ASPECT_X, 3);
+        intent.putExtra(CropImage.ASPECT_Y, 3);
 
         // start activity CropImage with certain request code and listen
         // for result

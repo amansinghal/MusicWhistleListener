@@ -183,14 +183,14 @@
         android:textSize="23dp" />
 
 
-    <ImageView
+    <LinearLayout
         android:id="@+id/ad_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
         android:adjustViewBounds="true"
         android:maxHeight="54dp"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"/>
 
 </RelativeLayout>

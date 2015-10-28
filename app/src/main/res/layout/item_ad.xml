@@ -6,19 +6,19 @@
 
     <ImageView
         android:id="@+id/item_ad_iv_ad_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/item_ad_delete"
-        android:adjustViewBounds="true"
         android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/item_ad_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/item_ad_iv_ad_image"
         android:layout_toLeftOf="@+id/item_ad_delete"
-        android:layout_below="@+id/item_ad_iv_ad_image"/>
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"/>
 
     <TextView
         android:id="@+id/item_ad_click"

@@ -1,10 +1,12 @@
 package com.music.aman.musicg;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,5 +141,15 @@ public class Utils {
         dialog.setSingleChoiceItems(array, 0, listener);
         dialog.show();
     }
+
+    public static int[] getWidthHeight(Context context){
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        return  new int[]{width,height};
+    }
+
+
 
 }
