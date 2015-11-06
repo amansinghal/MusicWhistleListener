@@ -23,12 +23,16 @@ import android.widget.ToggleButton;
 
 import com.music.aman.musicg.Models.APIInterface;
 import com.music.aman.musicg.Models.APIModel;
+import com.music.aman.musicg.Models.AdListItemView;
+import com.music.aman.musicg.Models.Addvertisment;
 import com.squareup.picasso.Picasso;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import eu.janmuller.android.simplecropimage.Util;
+import io.nlopez.smartadapters.SmartAdapter;
+import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -169,6 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                                                 if (!strUrl.startsWith("http://") && !strUrl.startsWith("https://")) {
                                                                     strUrl = "http://" + strUrl;
                                                                 }
+                                                                markOnAd(apiModel.getAddvertisment().get(pos).getId());
 
                                                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUrl));
 
@@ -208,6 +213,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void failure(RetrofitError error) {
                 error.printStackTrace();
                 Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void markOnAd(String ad_id)
+    {
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(AuthorizationActivity.API).setLogLevel(RestAdapter.LogLevel.FULL).build();
+
+        final APIInterface apiInterface = restAdapter.create(APIInterface.class);
+
+        apiInterface.addClicks("addClicks",ad_id, new Callback<APIModel>() {
+            @Override
+            public void success(APIModel apiModel, Response response) {
+                System.out.println(apiModel);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
             }
         });
     }
@@ -321,11 +345,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             checkAuthorization(viewId);
         } else {
             //startActivity(Activity_Paypal.getIntent(this));
-            progressDialog.show();
             if (viewId == R.id.advertisment) {
-                getReqAddSubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""), viewId);
+                openCorrespondingFacility(viewId);
                 return;
             }
+            progressDialog.show();
             getReqFacilitySubcriptions("subcription", sharedPreferences.getString(USER_ID_KEY, ""), viewId);
         }
     }

@@ -71,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Addvertisment Subscribed till:"
+            android:visibility="gone"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#c94242" />
 
@@ -79,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:visibility="gone"
             android:textColor="@android:color/black"
             android:text="18-05-2015"
             android:textSize="25sp" />

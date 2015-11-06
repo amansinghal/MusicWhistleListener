@@ -18,6 +18,27 @@ public class Addvertisment implements Serializable
 
     private String clicks;
 
+    private String isVisible;
+
+    private String isPaymentDone;
+
+    private String Expiry;
+
+    public String getIsVisible()
+    {
+        return isVisible;
+    }
+
+    public String getIsPaymentDone()
+    {
+        return isPaymentDone;
+    }
+
+    public String getExpiry()
+    {
+        return Expiry;
+    }
+
     public String getClicks() {
         return clicks;
     }

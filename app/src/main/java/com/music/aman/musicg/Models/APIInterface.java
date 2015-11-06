@@ -35,6 +35,10 @@ public  interface APIInterface {
 
     @FormUrlEncoded
     @POST("/index.php")
+    public void addClicks(@Field("tag")String tag,@Field("ad_id")String ad_id,Callback<APIModel> apiModelCallback);
+
+    @FormUrlEncoded
+    @POST("/index.php")
     public void getPayments(@Field("tag")String tag,@Field("uid")String user_id,Callback<APIModel> apiModelCallback);
 
     @FormUrlEncoded

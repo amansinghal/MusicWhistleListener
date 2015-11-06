@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -96,6 +99,19 @@ public class Activity_Paypal extends Activity {
 
         radioGroup = (RadioGroup) findViewById(R.id.radio_group);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+        {
+            final float scale = this.getResources().getDisplayMetrics().density;
+            ((RadioButton) radioGroup.getChildAt(0)).setPadding(((RadioButton) radioGroup.getChildAt(0)).getPaddingLeft() + (int) (10.0f * scale + 0.5f),
+                    ((RadioButton) radioGroup.getChildAt(0)).getPaddingTop(),
+                    ((RadioButton) radioGroup.getChildAt(0)).getPaddingRight(),
+                    ((RadioButton) radioGroup.getChildAt(0)).getPaddingBottom());
+
+            ((RadioButton) radioGroup.getChildAt(1)).setPadding(((RadioButton) radioGroup.getChildAt(1)).getPaddingLeft() + (int) (10.0f * scale + 0.5f),
+                    ((RadioButton) radioGroup.getChildAt(1)).getPaddingTop(),
+                    ((RadioButton) radioGroup.getChildAt(1)).getPaddingRight(),
+                    ((RadioButton) radioGroup.getChildAt(1)).getPaddingBottom());
+        }
         continueBtn = (Button) findViewById(R.id.pay_continue);
 
         continueBtn.setOnClickListener(new View.OnClickListener() {

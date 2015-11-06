@@ -58,8 +58,14 @@ public class Frag_MyAds extends Fragment implements ViewEventListener {
         ButterKnife.bind(this, view);
         ((Activity_Advertisement)getActivity()).ivAddAd.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getAdds();
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        getAdds();
+        super.onResume();
     }
 
     private void getAdds(){
