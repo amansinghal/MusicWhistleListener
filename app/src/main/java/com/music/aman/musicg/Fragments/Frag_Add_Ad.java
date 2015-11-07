@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.music.aman.musicg.Activity_Advertisement;
+import com.music.aman.musicg.Activity_Paypal;
 import com.music.aman.musicg.FileUtils;
 import com.music.aman.musicg.MainActivity;
 import com.music.aman.musicg.Models.APIInterface;
@@ -106,6 +107,8 @@ public class Frag_Add_Ad extends Fragment {
             public void success(APIModel apiModel, Response response) {
                 advertisement.hideProgess();
                 if (apiModel.getSuccess().equals("1")) {
+                    if (objAddvertisment == null)
+                    startActivity(Activity_Paypal.getIntent(getActivity(),R.id.advertisment,"Ad Subscription",apiModel.getAd_id()));
                     getFragmentManager().popBackStack();
                 } else {
                     Toast.makeText(getActivity(), apiModel.getReplyMsg(), Toast.LENGTH_LONG).show();

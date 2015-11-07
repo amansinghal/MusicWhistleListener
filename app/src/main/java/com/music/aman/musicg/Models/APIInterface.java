@@ -25,6 +25,10 @@ public  interface APIInterface {
     @POST("/index.php")
     public void getUSerSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,@Field("type")String type,Callback<APIModel> apiModelCallback);
 
+    @FormUrlEncoded
+    @POST("/index.php")
+    public void addSubscriptionUpdate(@Field("tag")String tag,@Field("user_id")String user_id,@Field("price")String price,@Field("type")String type,@Field("ad_id")String ad_id,@Field("period")String period,Callback<APIModel> apiModelCallback);
+
     @Multipart
     @POST("/upload.php")
     public void upload(@Part("fileToUpload")TypedFile file,@Part("ad_id")String ad_id,@Part("uid")String uid,@Part("url")String url,Callback<APIModel> apiModelCallback);

@@ -20,6 +20,12 @@ public class APIModel
 
     private Subcriptions subcriptions;
 
+    private String ad_id;
+
+    public String getAd_id() {
+        return ad_id;
+    }
+
     private String image_path;
 
     private ArrayList<Addvertisment> addvertisment;

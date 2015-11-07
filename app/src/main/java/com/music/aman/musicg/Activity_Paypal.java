@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.music.aman.musicg.Models.APIInterface;
@@ -63,6 +64,7 @@ public class Activity_Paypal extends Activity {
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     public static final String PAYMENT_FOR_KEY = "PAYMENT_FOR_KEY";
     public static final String VIEW_FOR_KEY = "VIEW_FOR_KEY";
+    public static final String AD_ID_KEY = "AD_ID_KEY";
     private static PayPalConfiguration config = new PayPalConfiguration().environment(CONFIG_ENVIRONMENT).clientId(CONFIG_CLIENT_ID)
 // the following are only used in PayPalFuturePaymentActivity.
             .merchantName("Hipster Store")
@@ -75,7 +77,7 @@ public class Activity_Paypal extends Activity {
     private Button continueBtn;
     private SharedPreferences preferences;
     private ProgressDialog progressDialog;
-    private String payFor;
+    private String payFor, ad_id = "";
     private int viewFor, totCount = 0;
 
     enum paymentFor {
@@ -92,15 +94,20 @@ public class Activity_Paypal extends Activity {
         progressDialog.setCancelable(false);
         payFor = getIntent().getStringExtra(PAYMENT_FOR_KEY);
         viewFor = getIntent().getIntExtra(VIEW_FOR_KEY, 0);
+        ad_id = getIntent().getStringExtra(AD_ID_KEY);
         setContentView(R.layout.activity_paypal);
+        if (ad_id != null) {
+            ((TextView) findViewById(R.id.add_header_msg)).setText(getString(R.string.ad_sub_msg));
+        }else{
+            ad_id = "";
+        }
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
 
         radioGroup = (RadioGroup) findViewById(R.id.radio_group);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             final float scale = this.getResources().getDisplayMetrics().density;
             ((RadioButton) radioGroup.getChildAt(0)).setPadding(((RadioButton) radioGroup.getChildAt(0)).getPaddingLeft() + (int) (10.0f * scale + 0.5f),
                     ((RadioButton) radioGroup.getChildAt(0)).getPaddingTop(),
@@ -118,7 +125,7 @@ public class Activity_Paypal extends Activity {
             @Override
             public void onClick(View view) {
                 if (radioGroup.getCheckedRadioButtonId() == R.id.radio1) {
-                    thingToBuy = new PayPalPayment(new BigDecimal("15"), "USD", payFor, PayPalPayment.PAYMENT_INTENT_SALE);
+                    thingToBuy = new PayPalPayment(ad_id.isEmpty() ? new BigDecimal("15") : new BigDecimal("600"), "GBP", payFor, PayPalPayment.PAYMENT_INTENT_SALE);
                     Intent intent1 = new Intent(Activity_Paypal.this,
                             PaymentActivity.class);
                     intent1.putExtra(PaymentActivity.EXTRA_PAYMENT, thingToBuy);
@@ -140,6 +147,15 @@ public class Activity_Paypal extends Activity {
         return intent;
     }
 
+    public static Intent getIntent(Context context, int viewFor, String paymentFor, String ad_id) {
+
+        Intent intent = new Intent(context, Activity_Paypal.class);
+        intent.putExtra(PAYMENT_FOR_KEY, paymentFor);
+        intent.putExtra(VIEW_FOR_KEY, viewFor);
+        intent.putExtra(AD_ID_KEY, ad_id);
+        return intent;
+    }
+
     public void onFuturePaymentPressed(View pressed) {
         Intent intent = new Intent(Activity_Paypal.this,
                 PayPalFuturePaymentActivity.class);
@@ -158,7 +174,7 @@ public class Activity_Paypal extends Activity {
                         JSONObject jsonObject = confirm.toJSONObject();
                         jsonObject = jsonObject.getJSONObject("response");
                         if (jsonObject.getString("state").equalsIgnoreCase("approved")) {
-                            if (payFor.equalsIgnoreCase("advertisement")) {
+                            if (payFor.equalsIgnoreCase("Ad Subscription")) {
                                 updateAdSubcription();
                             } else {
                                 updateFacilitySubcription();
@@ -236,7 +252,7 @@ public class Activity_Paypal extends Activity {
 
         final APIInterface apiInterface = Utils.getAdapterWebService();
 
-        apiInterface.getUSerSubscriptionUpdate("updatefacilitySubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15","Paypal", new Callback<APIModel>() {
+        apiInterface.getUSerSubscriptionUpdate("updatefacilitySubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15", "Paypal", new Callback<APIModel>() {
             @Override
             public void success(APIModel apiModel, Response response) {
                 System.out.println(apiModel);
@@ -266,11 +282,12 @@ public class Activity_Paypal extends Activity {
     }
 
     private void updateAdSubcription() {
+
         progressDialog.show();
 
         final APIInterface apiInterface = Utils.getAdapterWebService();
 
-        apiInterface.getUSerSubscriptionUpdate("addSubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "15","Paypal", new Callback<APIModel>() {
+        apiInterface.addSubscriptionUpdate("addSubcription", preferences.getString(MainActivity.USER_ID_KEY, ""), "600", "Paypal", ad_id, "6", new Callback<APIModel>() {
             @Override
             public void success(APIModel apiModel, Response response) {
                 System.out.println(apiModel);

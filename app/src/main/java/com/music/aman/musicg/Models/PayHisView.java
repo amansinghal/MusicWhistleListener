@@ -33,7 +33,7 @@ public class PayHisView extends BindableLayout<Payments> {
         String fromat = "<b>Pay for:</b> "+payments.getPay_for()+"<br>" +
                 "<b>Date: </b>"+payments.getDate_pay()+"<br>" +
                 "<b>Pay via: </b>"+payments.getType()+"<br>"+
-                "<b>$</b>"+payments.getAmount();
+                "<b>&#163;</b>"+payments.getAmount();
         textView.setText(Html.fromHtml(fromat));
     }
 }

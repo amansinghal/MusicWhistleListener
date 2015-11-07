@@ -71,7 +71,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Utils.overrideFonts(this, this.getWindow().getDecorView().findViewById(android.R.id.content));
         runnerServiceIntent = new Intent(this, RunnerService.class);
         timer = new Timer();
-        getAdds();
         adWidth = Utils.getWidthHeight(this)[0] / 5;
     }
 
@@ -137,7 +136,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void run() {
 
-                            if ((5 + i) >= apiModel.getAddvertisment().size()) {
+//                            Log.e("(5 + i)",""+(5 + i));
+
+                            if ((5 + i) > apiModel.getAddvertisment().size() && i != 0) {
                                 i = 0;
                                 getAdds();
                                 return;
@@ -150,22 +151,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                         adView.removeAllViews();
 
-                                        final int pos = i;
+
 
                                         int endPos = apiModel.getAddvertisment().size() > ( 5 + i) ? (5 + i) : apiModel.getAddvertisment().size();
 
                                         for (int j = 0+i ;j < endPos ; j++){
 
+                                            final int pos = j;
+
                                             Log.e("Positions", "" + j + "URL" + apiModel.getImage_path() + apiModel.getAddvertisment().get(j).getImage_url());
 
-                                            ImageView imageView = new ImageView(MainActivity.this);
+                                            final ImageView imageView = new ImageView(MainActivity.this);
 
                                             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
                                             Picasso.with(MainActivity.this).load(apiModel.getImage_path() + apiModel.getAddvertisment().get(j).getImage_url()).resize(adWidth,adWidth).into(imageView, new com.squareup.picasso.Callback() {
                                                 @Override
                                                 public void onSuccess() {
-                                                    adView.setOnClickListener(new View.OnClickListener() {
+                                                    imageView.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
                                                             try {
@@ -193,7 +196,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                                                 }
                                             });
-
+                                            //if (apiModel.getAddvertisment().get(j).getIsVisible().equals("1"))
                                             adView.addView(imageView);
                                         }
 
@@ -212,7 +215,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void failure(RetrofitError error) {
                 error.printStackTrace();
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
