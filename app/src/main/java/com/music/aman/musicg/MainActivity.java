@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                checkSubcription(toggleButton.getId());
+                sharedPreferences.edit().putBoolean(FLASH_KEY, b).commit();
             }
         });
         adView = (LinearLayout) findViewById(R.id.ad_view);
@@ -518,9 +518,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.alarm_tone:
                 getAlarmUri();
                 break;
-            case R.id.toggleBtn:
-                sharedPreferences.edit().putBoolean(FLASH_KEY, ((ToggleButton) findViewById(viewId)).isChecked()).commit();
-                break;
+
         }
     }
 

@@ -107,7 +107,7 @@ public class Activity_Paypal extends Activity {
 
         radioGroup = (RadioGroup) findViewById(R.id.radio_group);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             final float scale = this.getResources().getDisplayMetrics().density;
             ((RadioButton) radioGroup.getChildAt(0)).setPadding(((RadioButton) radioGroup.getChildAt(0)).getPaddingLeft() + (int) (10.0f * scale + 0.5f),
                     ((RadioButton) radioGroup.getChildAt(0)).getPaddingTop(),
