@@ -125,7 +125,7 @@ public class Activity_Paypal extends Activity {
             @Override
             public void onClick(View view) {
                 if (radioGroup.getCheckedRadioButtonId() == R.id.radio1) {
-                    thingToBuy = new PayPalPayment(ad_id.isEmpty() ? new BigDecimal("15") : new BigDecimal("600"), "GBP", payFor, PayPalPayment.PAYMENT_INTENT_SALE);
+                    thingToBuy = new PayPalPayment(ad_id.isEmpty() ? new BigDecimal("0.99") : new BigDecimal("600"), "GBP", payFor, PayPalPayment.PAYMENT_INTENT_SALE);
                     Intent intent1 = new Intent(Activity_Paypal.this,
                             PaymentActivity.class);
                     intent1.putExtra(PaymentActivity.EXTRA_PAYMENT, thingToBuy);
