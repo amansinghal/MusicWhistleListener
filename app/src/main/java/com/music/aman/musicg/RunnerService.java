@@ -52,7 +52,9 @@ public class RunnerService extends Service implements OnSignalsDetectedListener 
     public void onWhistleDetected() {
         //Toast.makeText(getBaseContext(),"Detected",Toast.LENGTH_SHORT).show();
         Log.e(getClass().getSimpleName(), "whistleRing");
-        if (!Utils.isRunning(this))
-        startActivity(Activity_Dialog_Found.getIntent(this));
+        if (!Utils.isRunning(this) && Activity_Dialog_Found.makeServiceDetectable) {
+            Activity_Dialog_Found.makeServiceDetectable = false;
+            startActivity(Activity_Dialog_Found.getIntent(this));
+        }
     }
 }

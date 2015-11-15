@@ -10,6 +10,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,6 +28,7 @@ public class Activity_Dialog_Found extends Activity {
     private Camera cam;
     MediaPlayer mediaPlayer;
     String alramUri;
+    public static boolean makeServiceDetectable = true;
 
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, Activity_Dialog_Found.class);
@@ -97,6 +99,13 @@ public class Activity_Dialog_Found extends Activity {
             r.stop();
         }
         ShouldIGlow = false;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               makeServiceDetectable = true;
+            }
+        },300);
     }
 
     public void NotifyWithFlash() {
@@ -107,7 +116,11 @@ public class Activity_Dialog_Found extends Activity {
             }
             try {
                 Thread.sleep(1000);
-                flashOFF();
+                try {
+                    flashOFF();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
