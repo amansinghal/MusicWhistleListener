@@ -8,6 +8,6 @@
     <string name="ready_to_record">Ready to record</string>
     <string name="facebook_app_id">1673684772867391</string>
     <string name="user_warning">You are not a registered now to proceed further you have to register your self using Facebook</string>
-    <string name="fac_sub_msg">"To use these all 3 services you have to pay &#163;0.99.\nThis is a on off payment.\n\nPlease Proceed to"</string>
+    <string name="fac_sub_msg">"To use these all 3 services you have to pay &#163;0.99.\nThis is a one off payment.\n\nPlease Proceed to"</string>
     <string name="ad_sub_msg">To publish your Advertisement you have to pay &#163;600 subscription for 6 Month</string>
 </resources>

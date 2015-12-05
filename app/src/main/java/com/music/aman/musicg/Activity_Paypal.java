@@ -56,10 +56,10 @@ public class Activity_Paypal extends Activity {
      */
 // private static final String CONFIG_ENVIRONMENT =
 // PayPalConfiguration.ENVIRONMENT_NO_NETWORK;
-    private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
+    private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_PRODUCTION;
     // note that these credentials will differ between live & sandbox
 // environments.
-    private static final String CONFIG_CLIENT_ID = "ARMUy3c9-LrgTH474_uDvxJqbbjTgUP7TcVj0Ykz3u83GO0vDwA6TFKaoMjxvjK7wPu_fCyfqV3ID2CH";
+    private static final String CONFIG_CLIENT_ID = "AZh13onnDN_W7coqvLlcgM5SxVxTrTAcuWoCrQCl8XELMKjgPfTfoPVncMlZVlVqhfwmoYY8lM2xHvkl";
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     public static final String PAYMENT_FOR_KEY = "PAYMENT_FOR_KEY";
